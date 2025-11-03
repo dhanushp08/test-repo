@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/src/lib/supabase';
+import { supabase } from '@/lib/supabase';
+import type { Session } from '@supabase/supabase-js';
 
 export default function ClickerPage() {
   const router = useRouter();
@@ -17,7 +18,8 @@ export default function ClickerPage() {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then((res: { data: { session: Session | null } }) => {
+      const session = res.data.session;
       if (!session) {
         router.replace('/');
       } else {
